@@ -66,14 +66,16 @@ st.set_page_config(page_title="IronLog — Workout Tracker", layout="wide", page
 st.markdown(DARK_CSS, unsafe_allow_html=True)
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
-def load_json(path: Path, default=list):
+def load_json(path: Path, default_factory=None):
+    if default_factory is None:
+        default_factory = list
     if path.exists():
         try:
             with open(path) as f:
                 return json.load(f)
         except Exception:
-            return default()
-    return default()
+            return default_factory()
+    return default_factory()
 
 def save_json(path: Path, data):
     with open(path, "w") as f:
